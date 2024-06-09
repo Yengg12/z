@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            vertical-align: top;
+            white-space: pre-wrap;
+            font-family: monospace;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<table>
+<tr>
+    <td>
+        Imports System.Data.OleDb
+
+
+        Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+            viewdata()
+        End Sub
+    
+        Private Sub viewdata()
+            Dim connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\User\OneDrive\Documents\exam.accdb"
+            Dim query As String = "SELECT * FROM register"
+    
+            Using connection As New OleDbConnection(connectionString)
+                Dim adapter As New OleDbDataAdapter(query, connection)
+                Dim table As New DataTable()
+                adapter.Fill(table)
+                DataGridView1.DataSource = table
+            End Using
+        End Sub      
+    </td>
+</tr>
+<tr>
+    <td>
+        Dim connectionString As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\User\OneDrive\Documents\exam.accdb"
+        Dim query As String = "INSERT INTO register ([name], [dob], [level], [subject]) VALUES (?, ?, ?, ?)"
+
+        Using connection As New OleDbConnection(connectionString)
+            Using command As New OleDbCommand(query, connection)
+                command.Parameters.AddWithValue("@name", name)
+                command.Parameters.AddWithValue("@dob", dob)
+                command.Parameters.AddWithValue("@level", level)
+                command.Parameters.AddWithValue("@subject", subjects.TrimEnd(", "))
+
+                Try
+                    connection.Open()
+                    command.ExecuteNonQuery()
+                    MessageBox.Show("Data save")
+
+                    TextBox1.Text = "Register success!" & vbCrLf &
+                                    "Name: " & name 
+                Catch ex As Exception
+                    MessageBox.Show("Error")
+                End Try
+            End Using
+        End Using       
+    </td>
+</tr>
+<tr>
+    <td>
+        Private Sub btnbrowse_Click(sender As Object, e As EventArgs) Handles btnbrowse.Click
+        If OpenFileDialog.ShowDialog() = DialogResult.OK Then
+            PictureBox1.Image = System.Drawing.Image.FromFile(OpenFileDialog.FileName)
+        End If
+    End Sub
+    </td>
+</tr>
+
+<tr>
+    <td>
+        Private Sub btnclear_Click(sender As Object, e As EventArgs) Handles btnclear.Click
+        DateTimePicker1.Value = DateTime.Now
+        rbno.Checked = False
+        chbm.Checked = False
+    End Sub
+    </td>
+</tr>
+</table>
+</body>
+</html>
+
